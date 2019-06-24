@@ -14,7 +14,7 @@ import com.vany.model.Empolyee;
 import com.vany.repositeroy.EmpolyeRepo;
 
 @RestController
-@RequestMapping("/emp")
+@RequestMapping("/emp/")
 public class EmployeeController {
 
 	@Autowired
