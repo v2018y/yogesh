@@ -14,25 +14,25 @@ import com.vany.model.Empolyee;
 import com.vany.repositeroy.EmpolyeRepo;
 
 @RestController
-@RequestMapping("/emp/")
+@RequestMapping("/api")
 public class EmployeeController {
 
 	@Autowired
 	EmpolyeRepo empolyeRepo;
 	
-	@GetMapping(value="/")
+	@GetMapping(value="/emp")
 	public java.util.List<Empolyee> findAll()
 	{
 		return  empolyeRepo.findAll();
 	}
 	
-	@GetMapping(value="/{id}")
+	@GetMapping(value="/emp/{id}")
 	public  Optional<Empolyee> findById(@PathVariable Integer id)
 	{
 		return  empolyeRepo.findById(id);
 	}
 	
-	@PostMapping(value = "/save")
+	@PostMapping(value = "/emp/save")
 	public Empolyee saveData(@RequestBody Empolyee emp){
 		return empolyeRepo.saveAndFlush(emp);
 	}
