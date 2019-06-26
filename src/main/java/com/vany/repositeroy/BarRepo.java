@@ -7,4 +7,5 @@ import com.vany.model.Bar;
 
 public interface BarRepo extends JpaRepository<Bar, Integer> {
 
+	
 }
