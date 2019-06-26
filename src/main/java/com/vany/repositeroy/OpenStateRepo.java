@@ -6,4 +6,6 @@ import com.vany.model.OpenSateBar;
 
 public interface OpenStateRepo extends JpaRepository<OpenSateBar, Integer> {
 
+	
+	
 }
