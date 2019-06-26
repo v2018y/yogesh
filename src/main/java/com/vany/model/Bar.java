@@ -1,104 +1,119 @@
 package com.vany.model;
 
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+
 @Entity
-@Table(name = "employee_tabel")
+@Table(name = "MainBar")
 public class Bar {
 
 	@Id
-	@Column(name = "item_id")
+	@Column(name = "itemId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer item_id;
+	private Integer itemId;
 
-	@Column(name = "item_name")
-	private String item_name;
+	@Column(name = "itemName")
+	private String itemName;
 
-	@Column(name = "item_qty")
-	private Long item_qty;
+	@Column(name = "itemQty")
+	private Long itemQty;
 
-	@Column(name = "item_price")
-	private Double item_price;
+	@Column(name ="itemPrice")
+	private Double itemPrice;
 
-	@Column(name = "item_cretated")
+	@Column(name = "itemCretated")
 	private Date created;
 
-	@Column(name = "item_updated")
+	@Column(name = "itemUpdated")
 	private Date updated;
 
 	@PrePersist
 	protected void onCreate() {
 		created = new Date();
 	}
-
+	
 	@PreUpdate
 	protected void onUpdate() {
 		updated = new Date();
 	}
 
+	
+	//Foregin Key 
+	
+	@OneToMany(mappedBy = "bar")
+	private Set<OpenSateBar> openState =new HashSet<OpenSateBar>();
+	
+	@OneToMany(mappedBy = "bar")
+	private Set<SalesStateBar> salesSateBar =new HashSet<SalesStateBar>();
+
 	/**
-	 * @return the item_id
+	 * @return the itemId
 	 */
-	public Integer getItem_id() {
-		return item_id;
+	public Integer getItemId() {
+		return itemId;
 	}
 
 	/**
-	 * @param item_id the item_id to set
+	 * @param itemId the itemId to set
 	 */
-	public void setItem_id(Integer item_id) {
-		this.item_id = item_id;
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
 	}
 
 	/**
-	 * @return the item_name
+	 * @return the itemName
 	 */
-	public String getItem_name() {
-		return item_name;
+	public String getItemName() {
+		return itemName;
 	}
 
 	/**
-	 * @param item_name the item_name to set
+	 * @param itemName the itemName to set
 	 */
-	public void setItem_name(String item_name) {
-		this.item_name = item_name;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 	/**
-	 * @return the item_qty
+	 * @return the itemQty
 	 */
-	public Long getItem_qty() {
-		return item_qty;
+	public Long getItemQty() {
+		return itemQty;
 	}
 
 	/**
-	 * @param item_qty the item_qty to set
+	 * @param itemQty the itemQty to set
 	 */
-	public void setItem_qty(Long item_qty) {
-		this.item_qty = item_qty;
+	public void setItemQty(Long itemQty) {
+		this.itemQty = itemQty;
 	}
 
 	/**
-	 * @return the item_price
+	 * @return the itemPrice
 	 */
-	public Double getItem_price() {
-		return item_price;
+	public Double getItemPrice() {
+		return itemPrice;
 	}
 
 	/**
-	 * @param item_price the item_price to set
+	 * @param itemPrice the itemPrice to set
 	 */
-	public void setItem_price(Double item_price) {
-		this.item_price = item_price;
+	public void setItemPrice(Double itemPrice) {
+		this.itemPrice = itemPrice;
 	}
 
 	/**
@@ -129,7 +144,24 @@ public class Bar {
 		this.updated = updated;
 	}
 
+	public Set<OpenSateBar> getOpenState() {
+		return openState;
+	}
+
+	public void setOpenState(Set<OpenSateBar> openState) {
+		this.openState = openState;
+	}
+
+	public Set<SalesStateBar> getSalesSateBar() {
+		return salesSateBar;
+	}
+
+	public void setSalesSateBar(Set<SalesStateBar> salesSateBar) {
+		this.salesSateBar = salesSateBar;
+	}
+
+
 	
-	
+		
 	
 }
