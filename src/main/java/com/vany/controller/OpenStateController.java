@@ -32,19 +32,19 @@ public class OpenStateController {
 	BarRepo barRepo;
 
 	// Get All OpenSate Records
-	@GetMapping(value = "/bar/openState")
+	@GetMapping(value = "/bar/{itemId}/openState")
 	public List<OpenSateBar> getAllOpenState() {
 		return openStateRepo.findAll();
 	}
 
 	// Get OpenSate Record By Id
-	@GetMapping(value = "/bar/{itemId}/openSate/")
+	@GetMapping(value = "/bar/{itemId}/openState/")
 	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable Integer bid,Pageable pageable) {
 		return openStateRepo.findById(bid);
 	}
 
 	// Save OpenSate Record
-	@PostMapping(value = "/bar/{itemId}/openSate/save")
+	@PostMapping(value = "/bar/{itemId}/openState/save")
 	public OpenSateBar saveOpenState(@PathVariable Integer bid,@RequestBody OpenSateBar openBar) {
 		Bar findBar= barRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
 		openBar.setBar(findBar);
@@ -53,7 +53,7 @@ public class OpenStateController {
 	}
 
 	// Update a OpenSate Record
-	@PutMapping("/bar/{itemId}/openSate/{openStateId}")
+	@PutMapping("/bar/{itemId}/openState/{openStateId}")
 	public OpenSateBar updateOpenState(@PathVariable Integer bid,@PathVariable Integer opid, @RequestBody OpenSateBar openBar) {
 		if(!barRepo.existsById(bid)) {
             throw new ResourceNotFoundException("Open State Item ", "id", bid);
@@ -64,7 +64,7 @@ public class OpenStateController {
 	}
 
 	// Delete a OpenSate Record
-	@DeleteMapping("/bar/{itemId}/openSate/{openStateId}")
+	@DeleteMapping("/bar/{itemId}/openState/{openStateId}")
 	public ResponseEntity<?> deleteOpenState(@PathVariable Integer bid,@PathVariable Integer opid) {
 		OpenSateBar findOpenState= openStateRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + bid + " and postId " + opid,null,bid));
 		openStateRepo.delete(findOpenState);
