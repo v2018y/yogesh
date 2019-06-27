@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,11 +64,11 @@ public class OpenStateController {
 	}
 
 	// Delete a OpenSate Record
-//	@DeleteMapping("/bar/{itemId}/openSate/{openStateId}")
-//	public ResponseEntity<?> deleteOpenState(@PathVariable Integer bid,@PathVariable Integer opid) {
-//		OpenSateBar findOpenState= openStateRepo.findByIdAndBarId(bid, opid).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + bid + " and postId " + opid,null,bid));
-//		openStateRepo.delete(findOpenState);
-//		 return ResponseEntity.ok().build();
-//	}
+	@DeleteMapping("/bar/{itemId}/openSate/{openStateId}")
+	public ResponseEntity<?> deleteOpenState(@PathVariable Integer bid,@PathVariable Integer opid) {
+		OpenSateBar findOpenState= openStateRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + bid + " and postId " + opid,null,bid));
+		openStateRepo.delete(findOpenState);
+		 return ResponseEntity.ok().build();
+	}
 
 }
