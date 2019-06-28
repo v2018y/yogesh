@@ -64,7 +64,7 @@ public class OpenStateController {
 		}
 		OpenSateBar findOpenState = openStateRepo.findById(opid)
 				.orElseThrow(() -> new ResourceNotFoundException("Open State Not Found ", "id", opid));
-		findOpenState.setSalesQty(openBar.getSalesQty());
+		findOpenState.setOpenQty(openBar.getOpenQty());
 		return openStateRepo.saveAndFlush(findOpenState);
 	}
 

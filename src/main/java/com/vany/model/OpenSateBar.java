@@ -33,7 +33,7 @@ public class OpenSateBar {
 	private Integer openId;
 	
 	@Column(name = "openQty")
-	private Long salesQty;
+	private Long openQty;
 	
 	@Column(name = "OpeningDate")
 	private Date createdAt;
@@ -63,18 +63,13 @@ public class OpenSateBar {
 		this.openId = openId;
 	}
 
-	/**
-	 * @return the salesQty
-	 */
-	public Long getSalesQty() {
-		return salesQty;
+	
+	public Long getOpenQty() {
+		return openQty;
 	}
 
-	/**
-	 * @param salesQty the salesQty to set
-	 */
-	public void setSalesQty(Long salesQty) {
-		this.salesQty = salesQty;
+	public void setOpenQty(Long openQty) {
+		this.openQty = openQty;
 	}
 
 	/**

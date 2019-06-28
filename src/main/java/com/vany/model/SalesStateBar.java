@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,10 +35,12 @@ public class SalesStateBar {
 	private Long salesQty;
 	
 	@Column(name = "salesDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
 	private Date createdAt;
-	
+
+	@PrePersist
+	protected void onCreate() {
+		createdAt = new Date();
+	}
 	 @ManyToOne(fetch = FetchType.LAZY, optional = false)
 	 @JoinColumn(name = "bar_item_id", nullable = false)
 	 @OnDelete(action = OnDeleteAction.CASCADE)
