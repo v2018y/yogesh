@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class OpenStateController {
 
 	@Autowired
 	OpenStateRepo openStateRepo;
-	
+
 	@Autowired
 	BarRepo barRepo;
 
@@ -38,37 +39,43 @@ public class OpenStateController {
 	}
 
 	// Get OpenSate Record By Id
-	@GetMapping(value = "/bar/{itemId}/openState/")
-	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable Integer bid,Pageable pageable) {
-		return openStateRepo.findById(bid);
+	@GetMapping(value = "/bar/{itemId}/openState/{openStateId}")
+	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable(value = "itemId") Integer bid,
+			@PathVariable(value = "openStateId") Integer opid, Pageable pageable) {
+		return openStateRepo.findById(opid);
 	}
 
 	// Save OpenSate Record
 	@PostMapping(value = "/bar/{itemId}/openState/save")
-	public OpenSateBar saveOpenState(@PathVariable (value = "itemId")Integer bid,@RequestBody OpenSateBar openBar) {
-		Bar findBar= barRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+	public OpenSateBar saveOpenState(@PathVariable(value = "itemId") Integer bid, @RequestBody OpenSateBar openBar) {
+		Bar findBar = barRepo.findById(bid)
+				.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
 		openBar.setBar(findBar);
 		return openStateRepo.saveAndFlush(openBar);
-    
+
 	}
 
 	// Update a OpenSate Record
 	@PutMapping("/bar/{itemId}/openState/{openStateId}")
-	public OpenSateBar updateOpenState(@PathVariable (value = "itemId") Integer bid,@PathVariable(value ="openStateId") Integer opid, @RequestBody OpenSateBar openBar) {
-		if(!barRepo.existsById(bid)) {
-            throw new ResourceNotFoundException("Open State Item ", "id", bid);
-        }
-		OpenSateBar findOpenState = openStateRepo.findById(opid).orElseThrow(() -> new ResourceNotFoundException("Open State Not Found ", "id", opid));
+	public OpenSateBar updateOpenState(@PathVariable(value = "itemId") Integer bid,
+			@PathVariable(value = "openStateId") Integer opid, @RequestBody OpenSateBar openBar) {
+		if (!barRepo.existsById(bid)) {
+			throw new ResourceNotFoundException("Open State Item ", "id", bid);
+		}
+		OpenSateBar findOpenState = openStateRepo.findById(opid)
+				.orElseThrow(() -> new ResourceNotFoundException("Open State Not Found ", "id", opid));
 		findOpenState.setSalesQty(openBar.getSalesQty());
 		return openStateRepo.saveAndFlush(findOpenState);
 	}
 
 	// Delete a OpenSate Record
 	@DeleteMapping("/bar/{itemId}/openState/{openStateId}")
-	public ResponseEntity<?> deleteOpenState(@PathVariable (value = "itemId") Integer bid,@PathVariable(value ="openStateId") Integer opid) {
-		OpenSateBar findOpenState= openStateRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + bid + " and postId " + opid,null,bid));
+	public ResponseEntity<?> deleteOpenState(@PathVariable(value = "itemId") Integer bid,
+			@PathVariable(value = "openStateId") Integer opid) {
+		OpenSateBar findOpenState = openStateRepo.findById(opid).orElseThrow(() -> new ResourceNotFoundException(
+				"Open State not found with id " + bid + " and postId " + opid, null, bid));
 		openStateRepo.delete(findOpenState);
-		 return ResponseEntity.ok().build();
+		return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
 	}
 
 }

@@ -3,7 +3,6 @@ package com.vany.swaggerconfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -25,11 +24,14 @@ public class MySwaggerConfig {
 	                .apiInfo(apiInfo());
 	    }
 
-	    private ApiInfo apiInfo() {
-	        return new ApiInfoBuilder()
-	                .title("Hotel Rest Api")
-	                .description("This is basic API for Creating Hotel Managment Software Applications.")
-	                .version("V 0.1.0")
-	                .build();
+	    @SuppressWarnings("deprecation")
+		private ApiInfo apiInfo() {
+	        return new ApiInfo("V & Y SOFT. TECH. PVT. LTD.", 
+	        				   "This Rest API For the Developemt of Bar Management Software (BMS)", 
+	        				   "V0.1", 
+	        				   "Vishva & Yogesh Visit http://vany.is-best.net/ ", 
+	        				   "Apache License Version 2.0", 
+	        				   "https://www.apache.org/licenses/LICENSE-2.0", 
+	        				   "Contact us :- v2018y@gmail.com");
 	    }
 }
