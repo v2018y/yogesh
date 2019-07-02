@@ -25,7 +25,7 @@ import com.vany.repositeroy.OpenStateRepo;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")   
+@CrossOrigin(origins = "*")
 public class OpenStateController {
 
 	@Autowired
@@ -55,6 +55,18 @@ public class OpenStateController {
 		openBar.setBar(findBar);
 		return openStateRepo.saveAndFlush(openBar);
 
+	}
+
+	// Save All OpenSate Record
+	@PostMapping(value = "/bar/{itemId}/openState/saveAll")
+	public List<OpenSateBar> saveOpenStateBatch(@PathVariable(value = "itemId") Integer bid,
+			@RequestBody List<OpenSateBar> openBar) {
+		Bar findBar = barRepo.findById(bid)
+				.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+		for (OpenSateBar data : openBar) {
+			data.setBar(findBar);
+		}
+		return openStateRepo.saveAll(openBar);
 	}
 
 	// Update a OpenSate Record

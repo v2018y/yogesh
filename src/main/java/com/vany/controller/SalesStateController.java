@@ -58,6 +58,19 @@ public class SalesStateController {
 		return salesStateRepo.saveAndFlush(salesBar);
 
 	}
+	
+	// Save All SalesState Record
+		@PostMapping(value = "/bar/{itemId}/salesState/saveAll")
+		public List<SalesStateBar> saveSalesBatchState(@PathVariable(value = "itemId") Integer bid,
+				@RequestBody List<SalesStateBar> salesBar) {
+			Bar findBar = barRepo.findById(bid)
+					.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+			for (SalesStateBar data : salesBar) {
+				data.setBar(findBar);
+			}
+			return salesStateRepo.saveAll(salesBar);
+
+		}
 
 	// Update a SalesState Record
 	@PutMapping("/bar/{itemId}/salesState/{salesStateId}")
