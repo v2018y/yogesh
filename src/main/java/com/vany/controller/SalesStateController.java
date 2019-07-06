@@ -26,7 +26,7 @@ import com.vany.repositeroy.SalesStateRepo;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")   
+@CrossOrigin(origins = "*")
 public class SalesStateController {
 
 	@Autowired
@@ -39,6 +39,12 @@ public class SalesStateController {
 	@GetMapping(value = "/bar/{itemId}/salesState")
 	public List<SalesStateBar> getAllSalesState() {
 		return salesStateRepo.findAll();
+	}
+
+	// Get All SalesState Records By Date
+	@GetMapping(value = "/bar/salesState/{Date}")
+	public List<SalesStateBar> getAllSalesStateByDate(@PathVariable(value = "Date") String userDate) {
+		return salesStateRepo.findBycreatedAt(userDate);
 	}
 
 	// Get SalesState Record By Id
@@ -58,19 +64,19 @@ public class SalesStateController {
 		return salesStateRepo.saveAndFlush(salesBar);
 
 	}
-	
-	// Save All SalesState Record
-		@PostMapping(value = "/bar/{itemId}/salesState/saveAll")
-		public List<SalesStateBar> saveSalesBatchState(@PathVariable(value = "itemId") Integer bid,
-				@RequestBody List<SalesStateBar> salesBar) {
-			Bar findBar = barRepo.findById(bid)
-					.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
-			for (SalesStateBar data : salesBar) {
-				data.setBar(findBar);
-			}
-			return salesStateRepo.saveAll(salesBar);
 
+	// Save All SalesState Record
+	@PostMapping(value = "/bar/{itemId}/salesState/saveAll")
+	public List<SalesStateBar> saveSalesBatchState(@PathVariable(value = "itemId") Integer bid,
+			@RequestBody List<SalesStateBar> salesBar) {
+		Bar findBar = barRepo.findById(bid)
+				.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+		for (SalesStateBar data : salesBar) {
+			data.setBar(findBar);
 		}
+		return salesStateRepo.saveAll(salesBar);
+
+	}
 
 	// Update a SalesState Record
 	@PutMapping("/bar/{itemId}/salesState/{salesStateId}")

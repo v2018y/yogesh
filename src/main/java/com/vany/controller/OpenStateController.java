@@ -40,6 +40,12 @@ public class OpenStateController {
 		return openStateRepo.findAll();
 	}
 
+	// Get All OpenSate Records by Date
+	@GetMapping(value = "/bar/openState/{Date}")
+	public List<OpenSateBar> getAllOpenStateByDate(@PathVariable(value = "Date") String userDate) {
+		return openStateRepo.findByCreatedAt(userDate);
+	}
+
 	// Get OpenSate Record By Id
 	@GetMapping(value = "/bar/{itemId}/openState/{openStateId}")
 	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable(value = "itemId") Integer bid,

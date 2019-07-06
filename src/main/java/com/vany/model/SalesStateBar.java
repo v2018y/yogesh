@@ -24,30 +24,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "SalesStatement")
-@JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
+@JsonIgnoreProperties(value = { "createdAt" }, allowGetters = true)
 public class SalesStateBar {
 	@Id
 	@Column(name = "SalesId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer salesId;
-	
+
 	@Column(name = "salesQty")
 	private Long salesQty;
-	
-	@Column(name = "salesDate")
-	private Date createdAt;
 
-	@PrePersist
-	protected void onCreate() {
-		createdAt = new Date();
-	}
-	 @ManyToOne(fetch = FetchType.LAZY, optional = false)
-	 @JoinColumn(name = "bar_item_id", nullable = false)
-	 @OnDelete(action = OnDeleteAction.CASCADE)
-	 @JsonIgnore
+	@Column(name = "salesDate")
+	private String createdAt;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "bar_item_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private Bar bar;
-	
-	
 
 	/**
 	 * @return the salesId
@@ -91,14 +85,12 @@ public class SalesStateBar {
 		this.bar = bar;
 	}
 
-	public Date getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-	
-	
 
 }
