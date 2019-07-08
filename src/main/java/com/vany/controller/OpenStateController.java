@@ -35,21 +35,20 @@ public class OpenStateController {
 	BarRepo barRepo;
 
 	// Get All OpenSate Records
-	@GetMapping(value = "/bar/{itemId}/openState")
+	@GetMapping(value = "/bar/openState")
 	public List<OpenSateBar> getAllOpenState() {
 		return openStateRepo.findAll();
 	}
 
 	// Get All OpenSate Records by Date
-	@GetMapping(value = "/bar/openState/{Date}")
+	@GetMapping(value = "/bar/openState/date/{Date}")
 	public List<OpenSateBar> getAllOpenStateByDate(@PathVariable(value = "Date") String userDate) {
 		return openStateRepo.findBycreatedAt(userDate);
 	}
 
 	// Get OpenSate Record By Id
-	@GetMapping(value = "/bar/{itemId}/openState/{openStateId}")
-	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable(value = "itemId") Integer bid,
-			@PathVariable(value = "openStateId") Integer opid, Pageable pageable) {
+	@GetMapping(value = "/bar/openState/id/{openStateId}")
+	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable(value = "openStateId") Integer opid, Pageable pageable) {
 		return openStateRepo.findById(opid);
 	}
 

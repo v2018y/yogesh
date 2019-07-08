@@ -35,22 +35,21 @@ public class SalesStateController {
 	BarRepo barRepo;
 
 	// Get All SalesState Records
-	@GetMapping(value = "/bar/{itemId}/salesState")
+	@GetMapping(value = "/bar/salesState")
 	public List<SalesStateBar> getAllSalesState() {
 		return salesStateRepo.findAll();
 	}
 
 	// Get All SalesState Records By Date
-	@GetMapping(value = "/bar/salesState/{Date}")
+	@GetMapping(value = "/bar/salesState/date/{Date}")
 	public List<SalesStateBar> getAllSalesStateByDate(@PathVariable(value = "Date") String userDate) {
 		return salesStateRepo.findBycreatedAt(userDate);
 	}
 
 	// Get SalesState Record By Id
-	@GetMapping(value = "/bar/{itemId}/salesState/{salesStateId}")
-	public Optional<SalesStateBar> getSalesStateFindByItemId(@PathVariable(value = "itemId") Integer bid,
-			@PathVariable(value = "salesStateId") Integer spid, Pageable pageable) {
-		return salesStateRepo.findById(bid);
+	@GetMapping(value = "/bar/salesState/id/{salesStateId}")
+	public Optional<SalesStateBar> getSalesStateFindByItemId(@PathVariable(value = "salesStateId") Integer spid, Pageable pageable) {
+		return salesStateRepo.findById(spid);
 	}
 
 	// Save SalesState Record
