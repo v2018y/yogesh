@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vany.exception.ResourceNotFoundException;
 import com.vany.model.Bar;
-import com.vany.model.OpenSateBar;
 import com.vany.model.SalesStateBar;
 import com.vany.repositeroy.BarRepo;
 import com.vany.repositeroy.SalesStateRepo;

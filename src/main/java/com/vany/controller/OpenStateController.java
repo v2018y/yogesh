@@ -43,7 +43,7 @@ public class OpenStateController {
 	// Get All OpenSate Records by Date
 	@GetMapping(value = "/bar/openState/{Date}")
 	public List<OpenSateBar> getAllOpenStateByDate(@PathVariable(value = "Date") String userDate) {
-		return openStateRepo.findByCreatedAt(userDate);
+		return openStateRepo.findBycreatedAt(userDate);
 	}
 
 	// Get OpenSate Record By Id

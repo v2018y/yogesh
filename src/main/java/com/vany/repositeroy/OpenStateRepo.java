@@ -8,6 +8,6 @@ import com.vany.model.OpenSateBar;
 
 public interface OpenStateRepo extends JpaRepository<OpenSateBar, Integer> {
 
-	List<OpenSateBar> findByCreatedAt(String createdAt);
+	List<OpenSateBar> findBycreatedAt(String createdAt);
 	
 }
