@@ -33,6 +33,13 @@ public class Bar {
 
 	@Column(name ="itemPrice")
 	private Double itemPrice;
+	
+	@Column(name ="itemType")
+	private String itemType;
+	
+	@Column(name ="itemSize")
+	private String itemSize;
+	
 
 	@Column(name = "itemCretated")
 	private Date created;
@@ -159,7 +166,24 @@ public class Bar {
 		this.salesSateBar = salesSateBar;
 	}
 
+	public String getItemType() {
+		return itemType;
+	}
 
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+
+	public String getItemSize() {
+		return itemSize;
+	}
+
+	public void setItemSize(String itemSize) {
+		this.itemSize = itemSize;
+	}
+
+
+	
 	
 		
 	

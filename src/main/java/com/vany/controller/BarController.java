@@ -35,7 +35,7 @@ public class BarController {
 	// Get Item By Id
 	@GetMapping(value = "/bar/{id}")
 	public Bar itemFindById(@PathVariable Integer id) {
-		return barRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+		return barRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bar Controller", "id", id));
 	}
 
 	// Save Item
@@ -48,18 +48,20 @@ public class BarController {
 	@PutMapping("/bar/{id}")
 	public Bar updateItem(@PathVariable Integer id, @RequestBody Bar bar) {
 
-		Bar findBar = barRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bar ", "id", id));
+		Bar findBar = barRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bar Controller ", "id", id));
 
 		findBar.setItemName(bar.getItemName());
 		findBar.setItemPrice(bar.getItemPrice());
 		findBar.setItemQty(bar.getItemQty());
+		findBar.setItemSize(bar.getItemSize());
+		findBar.setItemType(bar.getItemType());
 		return barRepo.saveAndFlush(findBar);
 	}
 
 	// Delete a Employee
 	@DeleteMapping("/bar/{id}")
 	public ResponseEntity<?> deleteItem(@PathVariable Integer id) {
-		Bar findBar = barRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bar", "id", id));
+		Bar findBar = barRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bar Controller", "id", id));
 		barRepo.delete(findBar);
 		return ResponseEntity.ok().build();
 	}
