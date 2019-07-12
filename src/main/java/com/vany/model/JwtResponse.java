@@ -1,17 +1,48 @@
 package com.vany.model;
 
-import java.io.Serializable;
+public class JwtResponse{
 
-public class JwtResponse implements Serializable {
+	private String token;
+	private Long expire;
+	private String refreshToken;
+	
 
-	private static final long serialVersionUID = -8091879091924046844L;
-	private final String jwttoken;
-
-	public JwtResponse(String jwttoken) {
-		this.jwttoken = jwttoken;
+	public JwtResponse() {
+		System.out.println("JWT Respoense Called");
 	}
+
 
 	public String getToken() {
-		return this.jwttoken;
+		return token;
 	}
+
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+
+	public Long getExpire() {
+		return expire;
+	}
+
+
+	public void setExpire(Long expire) {
+		this.expire = expire;
+	}
+
+
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+
+	
+	
+	
+
 }

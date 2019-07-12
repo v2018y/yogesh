@@ -10,6 +10,8 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.impl.DefaultClock;
+import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -18,7 +20,8 @@ public class JwtTokenUtil implements Serializable {
 
 	private static final long serialVersionUID = -2550185165626007488L;
 
-	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+	public static final long JWT_TOKEN_VALIDITY = 5 * 60;
+	private Clock clock = DefaultClock.INSTANCE;
 
 	@Value("${jwt.secret}")
 	private String secret;
@@ -61,9 +64,15 @@ public class JwtTokenUtil implements Serializable {
 	//   compaction of the JWT to a URL-safe string 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
 
-		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-				.signWith(SignatureAlgorithm.HS512, secret).compact();
+		return Jwts
+				.builder()
+				.setIssuer("V & Y Soft. Tech. Pvt. Ltd.")
+				.setClaims(claims)
+				.setSubject(subject)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() +  JWT_TOKEN_VALIDITY * 1000))
+				.signWith(SignatureAlgorithm.HS512, secret)
+				.compact();
 	}
 
 	//validate token
@@ -71,4 +80,27 @@ public class JwtTokenUtil implements Serializable {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
+	
+	
+	
+//	public Boolean canTokenBeRefreshed(String token) {
+//        final Date created = getIssuedAtDateFromToken(token);
+//        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
+//            && (!isTokenExpired(token) || ignoreTokenExpiration(token));
+//    }
+
+	//this method provide the refresh token
+    public String refreshToken(UserDetails userDetails) {
+    	Map<String, Object> claims = new HashMap<>();
+     	return Jwts
+        		.builder()
+				.setIssuer("V & Y Soft. Tech. Pvt. Ltd.")
+				.setClaims(claims)
+				.setSubject(userDetails.getUsername())
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + (5 * 60 * 60) * 1000))
+				.signWith(SignatureAlgorithm.HS512, secret)
+				.compact();
+    }
+	
 }
