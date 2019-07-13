@@ -1,5 +1,8 @@
 package com.vany.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.w3c.dom.ls.LSInput;
 
 @Configuration
 @EnableWebSecurity
@@ -53,14 +57,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		   // We don't need CSRF for this example
-		httpSecurity
-				.cors()
-				.and()
-				.csrf()
-				.disable()
+		// We don't need CSRF for this example
+		httpSecurity.cors().and().csrf().disable()
 				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/oauth/token","/register","/","/swagger**","/webjars/**","/v2/**","/swagger-resources/**").permitAll().
+				.authorizeRequests().antMatchers("/oauth/token", "/register", "/", "/swagger**", "/webjars/**",
+						"/v2/**", "/swagger-resources/**")
+				.permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().
 				// make sure we use stateless session; session won't be used to
@@ -71,13 +73,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Add a filter to validate the tokens with every request
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
-	
-	 @Bean
-	    CorsConfigurationSource corsConfigurationSource() {
-	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-	        return source;
-	    }
-	
-	
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin("*");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
+	}
+
 }
