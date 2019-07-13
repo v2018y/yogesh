@@ -27,7 +27,7 @@ import com.vany.model.JwtResponse;
 import com.vany.model.UserDTO;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class JwtAuthenticationController {
 
 	@Autowired
