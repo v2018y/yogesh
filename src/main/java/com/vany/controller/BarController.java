@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +33,14 @@ public class BarController {
 	// Get All Item
 	@GetMapping(value = "/bar")
 	public List<Bar> getAllItem() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if(principal instanceof UserDetails) {
+			username =((UserDetails)principal).getUsername();
+		}else {
+			username=principal.toString();
+		}
+		System.out.println("Your User Name :"+username);
 		return barRepo.findAll();
 	}
 
