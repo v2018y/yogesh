@@ -2,6 +2,9 @@ package com.vany.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -21,6 +24,12 @@ public class DAOUser {
 	@Column
 	@JsonIgnore
 	private String password;
+	
+	
+	@OneToMany(mappedBy = "daoUser")
+	private Set<Bar> bar =new HashSet<Bar>();
+	
+	
 
 	public long getId() {
 		return id;
@@ -44,6 +53,14 @@ public class DAOUser {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Set<Bar> getBar() {
+		return bar;
+	}
+
+	public void setBar(Set<Bar> bar) {
+		this.bar = bar;
 	}
 
 }

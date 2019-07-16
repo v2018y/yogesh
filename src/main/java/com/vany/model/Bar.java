@@ -7,13 +7,22 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vany.model.DAOUser;
 
 
 @Entity
@@ -65,6 +74,14 @@ public class Bar {
 	
 	@OneToMany(mappedBy = "bar")
 	private Set<SalesStateBar> salesSateBar =new HashSet<SalesStateBar>();
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private DAOUser daoUser;
+	
 
 	/**
 	 * @return the itemId
@@ -182,9 +199,15 @@ public class Bar {
 		this.itemSize = itemSize;
 	}
 
+	public DAOUser getDaoUser() {
+		return daoUser;
+	}
+
+	public void setDaoUser(DAOUser daoUser) {
+		this.daoUser = daoUser;
+	}
 
 	
-	
-		
+
 	
 }

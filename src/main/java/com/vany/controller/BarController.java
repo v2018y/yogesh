@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vany.exception.ResourceNotFoundException;
 import com.vany.model.Bar;
+import com.vany.model.DAOUser;
 import com.vany.repositeroy.BarRepo;
+import com.vany.repositeroy.UserDao;
 
 @RestController
 @RequestMapping("/api")
@@ -29,10 +31,12 @@ public class BarController {
 
 	@Autowired
 	BarRepo barRepo;
+	
+	@Autowired
+	UserDao userDao;
 
-	// Get All Item
-	@GetMapping(value = "/bar")
-	public List<Bar> getAllItem() {
+	//This Functiosn get Username form Token And Return the User Details
+	public DAOUser  getUser() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username;
 		if(principal instanceof UserDetails) {
@@ -41,7 +45,14 @@ public class BarController {
 			username=principal.toString();
 		}
 		System.out.println("Your User Name :"+username);
-		return barRepo.findAll();
+		DAOUser daoUser=userDao.findByUsername(username);
+		return daoUser;
+	}
+	
+	// Get All Item
+	@GetMapping(value = "/bar")
+	public List<Bar> getAllItem() {
+		return barRepo.findByDaoUser(getUser());
 	}
 
 	// Get Item By Id
@@ -53,6 +64,7 @@ public class BarController {
 	// Save Item
 	@PostMapping(value = "/bar/save")
 	public Bar saveItem(@RequestBody Bar bar) {
+		bar.setDaoUser(getUser());
 		return barRepo.saveAndFlush(bar);
 	}
 
