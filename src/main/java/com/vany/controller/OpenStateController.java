@@ -57,31 +57,50 @@ public class OpenStateController {
 		return daoUser;
 	}
 
-	// Get All OpenSate Records
-	@GetMapping(value = "/bar/openState")
-	public List<OpenSateBar> getAllOpenState() {
-		// here we get according to username bar item data 		
+	public List<OpenSateBar> getListBarByUser() {
 		List<Bar> barList = barRepo.findByDaoUser(getUser());
-		
-		// here we decaler the temp result of openstate object for later we return this object
+
+		// here we decaler the temp result of openstate object for later we return this
+		// object
 		List<OpenSateBar> result = new ArrayList<OpenSateBar>();
-		
-		// in this for loop we whatever get bar item data we return form that we fetch the specfic openstate data and add to temp vairlbe
+
+		// in this for loop we whatever get bar item data we return form that we fetch
+		// the specfic openstate data and add to temp vairlbe
 		for (Bar barItem : barList) {
 			result.addAll(barItem.getOpenState());
 		}
-		
-		//	here we print the result 
+
+		// here we print the result
 		System.out.println("Your Data" + result);
-		
-		//	here we return the result.
+
+		// here we return the result.
 		return result;
+	}
+
+	// Get All OpenSate Records
+	@GetMapping(value = "/bar/openState")
+	public List<OpenSateBar> getAllOpenState() {
+		return getListBarByUser();
 	}
 
 	// Get All OpenSate Records by Date
 	@GetMapping(value = "/bar/openState/date/{Date}")
 	public List<OpenSateBar> getAllOpenStateByDate(@PathVariable(value = "Date") String userDate) {
-		return openStateRepo.findBycreatedAt(userDate);
+		// This Line Get All Open state Bar data According to user.
+		List<OpenSateBar> fetchOpenStateBar = getListBarByUser();
+		
+		//	This Line Declare The empty result of OpenState Bar Which will return By Later
+		List<OpenSateBar> result = new ArrayList<OpenSateBar>();
+		
+		//	Here We Checked the and Filter Data According to date
+		for (OpenSateBar barItem : fetchOpenStateBar) {
+			if (barItem.getCreatedAt().equals(userDate)) {
+				result.add(barItem);
+			}
+		}
+		
+		//	Here We what We Get result will be return
+		return result;
 	}
 
 	// Get OpenSate Record By Id
