@@ -1,5 +1,6 @@
 package com.vany.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vany.exception.ResourceNotFoundException;
 import com.vany.model.Bar;
+import com.vany.model.DAOUser;
 import com.vany.model.OpenSateBar;
 import com.vany.repositeroy.BarRepo;
 import com.vany.repositeroy.OpenStateRepo;
+import com.vany.repositeroy.UserDao;
 
 @RestController
 @RequestMapping("/api")
@@ -34,10 +39,43 @@ public class OpenStateController {
 	@Autowired
 	BarRepo barRepo;
 
+	@Autowired
+	UserDao userDao;
+
+	// This Functiosn get Username form Token And Return the User Details
+	public DAOUser getUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		System.out.println("Your User Name :" + username);
+
+		DAOUser daoUser = userDao.findByUsername(username);
+		return daoUser;
+	}
+
 	// Get All OpenSate Records
 	@GetMapping(value = "/bar/openState")
 	public List<OpenSateBar> getAllOpenState() {
-		return openStateRepo.findAll();
+		// here we get according to username bar item data 		
+		List<Bar> barList = barRepo.findByDaoUser(getUser());
+		
+		// here we decaler the temp result of openstate object for later we return this object
+		List<OpenSateBar> result = new ArrayList<OpenSateBar>();
+		
+		// in this for loop we whatever get bar item data we return form that we fetch the specfic openstate data and add to temp vairlbe
+		for (Bar barItem : barList) {
+			result.addAll(barItem.getOpenState());
+		}
+		
+		//	here we print the result 
+		System.out.println("Your Data" + result);
+		
+		//	here we return the result.
+		return result;
 	}
 
 	// Get All OpenSate Records by Date
@@ -48,7 +86,8 @@ public class OpenStateController {
 
 	// Get OpenSate Record By Id
 	@GetMapping(value = "/bar/openState/id/{openStateId}")
-	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable(value = "openStateId") Integer opid, Pageable pageable) {
+	public Optional<OpenSateBar> getOpenStateFindByItemId(@PathVariable(value = "openStateId") Integer opid,
+			Pageable pageable) {
 		return openStateRepo.findById(opid);
 	}
 
@@ -93,6 +132,7 @@ public class OpenStateController {
 			@PathVariable(value = "openStateId") Integer opid) {
 		OpenSateBar findOpenState = openStateRepo.findById(opid).orElseThrow(() -> new ResourceNotFoundException(
 				"Open State not found with id " + bid + " and postId " + opid, null, bid));
+//		openStateRepo.delete(findOpenState);
 		openStateRepo.delete(findOpenState);
 		return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
 	}
