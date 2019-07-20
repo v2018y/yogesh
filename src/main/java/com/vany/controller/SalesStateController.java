@@ -1,5 +1,6 @@
 package com.vany.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vany.exception.ResourceNotFoundException;
 import com.vany.model.Bar;
+import com.vany.model.DAOUser;
+import com.vany.model.OpenSateBar;
 import com.vany.model.SalesStateBar;
 import com.vany.repositeroy.BarRepo;
 import com.vany.repositeroy.SalesStateRepo;
+import com.vany.repositeroy.UserDao;
 
 @RestController
 @RequestMapping("/api")
@@ -34,21 +40,75 @@ public class SalesStateController {
 	@Autowired
 	BarRepo barRepo;
 
+	@Autowired
+	UserDao userDao;
+
+	// This Functiosn get Username form Token And Return the User Details
+	public DAOUser getUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		System.out.println("Your User Name :" + username);
+
+		DAOUser daoUser = userDao.findByUsername(username);
+		return daoUser;
+	}
+
+	public List<SalesStateBar> getListBarByUser() {
+		List<Bar> barList = barRepo.findByDaoUser(getUser());
+
+		// here we decaler the temp result of openstate object for later we return this
+		// object
+		List<SalesStateBar> result = new ArrayList<SalesStateBar>();
+
+		// in this for loop we whatever get bar item data we return form that we fetch
+		// the specfic openstate data and add to temp vairlbe
+		for (Bar barItem : barList) {
+			result.addAll(barItem.getSalesSateBar());
+		}
+
+		// here we print the result
+		System.out.println("Your Data" + result);
+
+		// here we return the result.
+		return result;
+	}
+
 	// Get All SalesState Records
 	@GetMapping(value = "/bar/salesState")
 	public List<SalesStateBar> getAllSalesState() {
-		return salesStateRepo.findAll();
+		return getListBarByUser();
 	}
 
 	// Get All SalesState Records By Date
 	@GetMapping(value = "/bar/salesState/date/{Date}")
 	public List<SalesStateBar> getAllSalesStateByDate(@PathVariable(value = "Date") String userDate) {
-		return salesStateRepo.findBycreatedAt(userDate);
+
+		// This Line Get All Open state Bar data According to user.
+		List<SalesStateBar> fetchOpenStateBar = getListBarByUser();
+
+		// This Line Declare The empty result of OpenState Bar Which will return By
+		// Later
+		List<SalesStateBar> result = new ArrayList<SalesStateBar>();
+
+		// Here We Checked the and Filter Data According to date
+		for (SalesStateBar barItem : fetchOpenStateBar) {
+			if (barItem.getCreatedAt().equals(userDate)) {
+				result.add(barItem);
+			}
+		}
+
+		return result;
 	}
 
 	// Get SalesState Record By Id
 	@GetMapping(value = "/bar/salesState/id/{salesStateId}")
-	public Optional<SalesStateBar> getSalesStateFindByItemId(@PathVariable(value = "salesStateId") Integer spid, Pageable pageable) {
+	public Optional<SalesStateBar> getSalesStateFindByItemId(@PathVariable(value = "salesStateId") Integer spid,
+			Pageable pageable) {
 		return salesStateRepo.findById(spid);
 	}
 
