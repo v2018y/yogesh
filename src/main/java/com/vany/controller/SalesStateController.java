@@ -114,11 +114,28 @@ public class SalesStateController {
 
 	// Save SalesState Record
 	@PostMapping(value = "/bar/{itemId}/salesState/save")
-	public SalesStateBar saveSalesState(@PathVariable(value = "itemId") Integer bid,
-			@RequestBody SalesStateBar salesBar) {
-		Bar findBar = barRepo.findById(bid)
-				.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+	public SalesStateBar saveSalesState(@PathVariable(value = "itemId") Integer bid, @RequestBody SalesStateBar salesBar) {
+		Bar findBar = barRepo.findById(bid) .orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+		
+		//	This Line Show the Whatever Sales Qty Come as input
+		System.out.println("Sales Qty : "+salesBar.getSalesQty());
+		
+		//	This Line What That Exact Qty In Database
+		System.out.println("Bar Item Qty: "+findBar.getItemQty());
+		
+		//  This Line Shows Doing Opertions And Deduct That Qty.
+		long updatedQty=findBar.getItemQty()-salesBar.getSalesQty();
+		
+		//  This line Shows the What Exact Value Geting
+		System.out.println("Updated Item Qty: "+updatedQty);
+		
+		//  This We Can Update The Value Of Qty
+		findBar.setItemQty(updatedQty);
+		
+		//  This Line We Set The Updated The Bar Item
 		salesBar.setBar(findBar);
+		
+		//	This We Save and Return The Result. 
 		return salesStateRepo.saveAndFlush(salesBar);
 
 	}
@@ -127,11 +144,12 @@ public class SalesStateController {
 	@PostMapping(value = "/bar/{itemId}/salesState/saveAll")
 	public List<SalesStateBar> saveSalesBatchState(@PathVariable(value = "itemId") Integer bid,
 			@RequestBody List<SalesStateBar> salesBar) {
-		Bar findBar = barRepo.findById(bid)
-				.orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+		Bar findBar = barRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Open State Item ", "id", bid));
+		
 		for (SalesStateBar data : salesBar) {
 			data.setBar(findBar);
 		}
+		
 		return salesStateRepo.saveAll(salesBar);
 
 	}
