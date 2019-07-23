@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -44,7 +45,8 @@ public class DAOUser {
 	private String password;
 	
 	@NotNull
-	@Column
+	@Email
+	@Column(unique=true)
 	private String email;
 	
 	
