@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -18,6 +19,24 @@ public class DAOUser {
 	
 	@NotNull
 	@Column
+	private String name;
+	
+	
+	@Column
+	private String company;
+	
+	@Column
+	private String address;
+	
+	@Column
+	private String adhar;
+	
+	@Column
+	private String gstin;
+	
+	
+	@NotNull
+	@Column
 	private String username;
 	
 	@NotNull
@@ -26,8 +45,10 @@ public class DAOUser {
 	private String password;
 	
 	@NotNull
-	@Column
+	@Email
+	@Column(unique=true)
 	private String email;
+	
 	
 	
 	
@@ -50,6 +71,51 @@ public class DAOUser {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getAdhar() {
+		return adhar;
+	}
+
+	public void setAdhar(String adhar) {
+		this.adhar = adhar;
+	}
+
+	
+	public String getGstin() {
+		return gstin;
+	}
+
+	public void setGstin(String gstin) {
+		this.gstin = gstin;
 	}
 
 	public String getUsername() {

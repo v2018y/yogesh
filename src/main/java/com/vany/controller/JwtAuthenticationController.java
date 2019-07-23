@@ -62,7 +62,7 @@ public class JwtAuthenticationController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@Valid @RequestBody UserDTO user) throws Exception {
 		String subject ="User Registerd on "+new Date().toString();
-		String body= "Hi Mr/Ms. <b>"+user.getUsername()+",</b><br><br>This Mail Regrading You Have Successfully Registered in VanY BMS Software.<br><br><br> Your Credtional Are as Below :<br> <b>Username:"+user.getUsername()+"</b> <br> <b>Password :</b> Contact Us on this Mobile No.(+91-8149648134)";
+		String body= "Hi Mr/Ms. <b>"+user.getName()+",</b><br><br>This Mail is Regarding Your Successfull Registration with V&Y company Bar Managment Software(BMS).<br><br><br> With Follows Details: <br> Name : <b>"+user.getName()+"</b> <br> Address : <b>"+user.getAddress()+"</b> <br> Email : <b>"+user.getEmail()+"</b> <br><br> Here are Your Credtionals :<br> Username:<b>"+user.getUsername()+"</b> <br> Password :<b>"+user.getPassword()+"</b>  <br>If any Query Contact Us on this Mobile No: <br> 1) +91-8007046661(Yogesh)<br> 2) +91-8149648134(Vishva)";
 		emailService.sendEmail(user.getEmail(), subject, body);
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
