@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.vany.services.EmailService;
 import com.vany.services.JwtUserDetailsService;
 
 import com.vany.config.JwtTokenUtil;
@@ -35,6 +37,9 @@ public class JwtAuthenticationController {
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
@@ -53,8 +58,10 @@ public class JwtAuthenticationController {
 		return ResponseEntity.ok(jwt);
 	}
 
+	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+		emailService.sendEmail(user.getEmail(), "Test Mail", "Hi This is Sample Mail");
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
 	
