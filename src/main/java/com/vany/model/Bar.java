@@ -75,94 +75,76 @@ public class Bar {
 	@OneToMany(mappedBy = "bar")
 	private Set<SalesStateBar> salesSateBar =new HashSet<SalesStateBar>();
 	
+	@OneToMany(mappedBy = "bar")
+	private Set<RecvStateBar> recvSateBar =new HashSet<RecvStateBar>();
+	
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private DAOUser daoUser;
-	
 
-	/**
-	 * @return the itemId
-	 */
 	public Integer getItemId() {
 		return itemId;
 	}
 
-	/**
-	 * @param itemId the itemId to set
-	 */
 	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 
-	/**
-	 * @return the itemName
-	 */
 	public String getItemName() {
 		return itemName;
 	}
 
-	/**
-	 * @param itemName the itemName to set
-	 */
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
 
-	/**
-	 * @return the itemQty
-	 */
 	public Long getItemQty() {
 		return itemQty;
 	}
 
-	/**
-	 * @param itemQty the itemQty to set
-	 */
 	public void setItemQty(Long itemQty) {
 		this.itemQty = itemQty;
 	}
 
-	/**
-	 * @return the itemPrice
-	 */
 	public Double getItemPrice() {
 		return itemPrice;
 	}
 
-	/**
-	 * @param itemPrice the itemPrice to set
-	 */
 	public void setItemPrice(Double itemPrice) {
 		this.itemPrice = itemPrice;
 	}
 
-	/**
-	 * @return the created
-	 */
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+
+	public String getItemSize() {
+		return itemSize;
+	}
+
+	public void setItemSize(String itemSize) {
+		this.itemSize = itemSize;
+	}
+
 	public Date getCreated() {
 		return created;
 	}
 
-	/**
-	 * @param created the created to set
-	 */
 	public void setCreated(Date created) {
 		this.created = created;
 	}
 
-	/**
-	 * @return the updated
-	 */
 	public Date getUpdated() {
 		return updated;
 	}
 
-	/**
-	 * @param updated the updated to set
-	 */
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
@@ -183,20 +165,12 @@ public class Bar {
 		this.salesSateBar = salesSateBar;
 	}
 
-	public String getItemType() {
-		return itemType;
+	public Set<RecvStateBar> getRecvSateBar() {
+		return recvSateBar;
 	}
 
-	public void setItemType(String itemType) {
-		this.itemType = itemType;
-	}
-
-	public String getItemSize() {
-		return itemSize;
-	}
-
-	public void setItemSize(String itemSize) {
-		this.itemSize = itemSize;
+	public void setRecvSateBar(Set<RecvStateBar> recvSateBar) {
+		this.recvSateBar = recvSateBar;
 	}
 
 	public DAOUser getDaoUser() {
@@ -206,8 +180,7 @@ public class Bar {
 	public void setDaoUser(DAOUser daoUser) {
 		this.daoUser = daoUser;
 	}
-
 	
-
+	
 	
 }

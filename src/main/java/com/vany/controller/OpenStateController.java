@@ -27,6 +27,7 @@ import com.vany.model.OpenSateBar;
 import com.vany.repositeroy.BarRepo;
 import com.vany.repositeroy.OpenStateRepo;
 import com.vany.repositeroy.UserDao;
+import com.vany.services.UserName;
 
 @RestController
 @RequestMapping("/api")
@@ -42,23 +43,11 @@ public class OpenStateController {
 	@Autowired
 	UserDao userDao;
 
-	// This Functiosn get Username form Token And Return the User Details
-	public DAOUser getUser() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username;
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		} else {
-			username = principal.toString();
-		}
-		System.out.println("Your User Name :" + username);
-
-		DAOUser daoUser = userDao.findByUsername(username);
-		return daoUser;
-	}
-
+	@Autowired
+	UserName userName;
+	
 	public List<OpenSateBar> getListBarByUser() {
-		List<Bar> barList = barRepo.findByDaoUser(getUser());
+		List<Bar> barList = barRepo.findByDaoUser(userName.getUser());
 
 		// here we decaler the temp result of openstate object for later we return this
 		// object
@@ -88,17 +77,14 @@ public class OpenStateController {
 	public List<OpenSateBar> getAllOpenStateByDate(@PathVariable(value = "Date") String userDate) {
 		// This Line Get All Open state Bar data According to user.
 		List<OpenSateBar> fetchOpenStateBar = getListBarByUser();
-		
 		//	This Line Declare The empty result of OpenState Bar Which will return By Later
 		List<OpenSateBar> result = new ArrayList<OpenSateBar>();
-		
 		//	Here We Checked the and Filter Data According to date
 		for (OpenSateBar barItem : fetchOpenStateBar) {
 			if (barItem.getCreatedAt().equals(userDate)) {
 				result.add(barItem);
 			}
 		}
-		
 		//	Here We what We Get result will be return
 		return result;
 	}
