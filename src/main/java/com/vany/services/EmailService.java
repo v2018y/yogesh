@@ -8,17 +8,10 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-
-	@Autowired
-    private JavaMailSender javaMailSender;
 	
 	public void sendEmail(String toAddress,String subject,String body) {
 		try {
@@ -34,22 +27,15 @@ public class EmailService {
 			mailSession.setDebug(true);
 
 			Message mailMessage= new MimeMessage(mailSession);
-			mailMessage.setFrom(new InternetAddress("vsurwshe@gmail.com"));
+			mailMessage.setFrom(new InternetAddress("v2018y@gmail.com"));
 			mailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
 			mailMessage.setContent(body, "text/html");
 			mailMessage.setSubject(subject);
 			
 			Transport transport=mailSession.getTransport("smtp");
-			transport.connect("smtp.gmail.com","vsurwshe@gmail.com","Vishv@nath96");
+			transport.connect("smtp.gmail.com","v2018y@gmail.com","Vany2018j");
 			
 			transport.sendMessage(mailMessage, mailMessage.getAllRecipients());
-			
-//			  SimpleMailMessage msg = new SimpleMailMessage();
-//		        msg.setTo(toAddress);
-//		        msg.setSubject(subject);
-//		        msg.setText(body);
-//		        javaMailSender.send(msg);
-
 			
 		} catch (MessagingException e) {
 			e.printStackTrace();
