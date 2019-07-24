@@ -54,15 +54,15 @@ public class RecvStateController {
 		return result;
 	}
 
-	// Get All OpenSate Records
+	// Get All RecevState Records
 	@GetMapping(value = "/bar/receviceState")
-	public List<RecvStateBar> getAllOpenState() {
+	public List<RecvStateBar> getAllRecevState() {
 		return getListRecivedBarByUser();
 	}
 
-	// Get All OpenSate Records by Date
+	// Get All RecevState Records by Date
 	@GetMapping(value = "/bar/receviceState/date/{Date}")
-	public List<RecvStateBar> getAllOpenStateByDate(@PathVariable(value = "Date") String userDate) {
+	public List<RecvStateBar> getAllRecevStateByDate(@PathVariable(value = "Date") String userDate) {
 		// This Line Get All Open state Bar data According to user.
 		List<RecvStateBar> fetchOpenStateBar = getListRecivedBarByUser();
 		// This Line Declare The empty result of OpenState Bar Which will return By
@@ -78,32 +78,48 @@ public class RecvStateController {
 		return result;
 	}
 
-	// Get OpenSate Record By Id
+	// Get RecevState Record By Id
 	@GetMapping(value = "/bar/receviceState/id/{recvStateId}")
-	public Optional<RecvStateBar> getOpenStateFindByItemId(@PathVariable(value = "recvStateId") Integer rpid,
+	public Optional<RecvStateBar> getRecevStateFindByItemId(@PathVariable(value = "recvStateId") Integer rpid,
 			Pageable pageable) {
 		return revcRepo.findById(rpid);
 	}
 
-	// Save All OpenSate Record
+	// Save RecevState Record
+	@PostMapping(value = "/bar/{itemId}/receviceState/save")
+	public RecvStateBar saveOpenState(@PathVariable(value = "itemId") Integer bid, @RequestBody RecvStateBar recvStateBar) {
+		Bar findBar = barRepo.findById(bid).orElseThrow(() -> new ResourceNotFoundException("Bar Item ", "id", bid));
+		// Here We Get Current Item Qty and Plus With New RecevState Bar Qty So we Get New Qty.
+		Long newQty = findBar.getItemQty()+ recvStateBar.getReceQty(); 
+		findBar.setItemQty(newQty);
+		recvStateBar.setBar(findBar);
+		return revcRepo.saveAndFlush(recvStateBar);
+
+	}
+
+	// Save All RecevState Record
 	@PostMapping(value = "/bar/{itemId}/receviceState/saveAll")
-	public List<RecvStateBar> saveOpenStateBatch(@PathVariable(value = "itemId") Integer bid,
+	public List<RecvStateBar> saveRecevStateBatch(@PathVariable(value = "itemId") Integer bid,
 			@RequestBody List<RecvStateBar> recvStateBar) {
 		Bar findBar = barRepo.findById(bid)
 				.orElseThrow(() -> new ResourceNotFoundException("Recevice State Item ", "id", bid));
 		for (RecvStateBar data : recvStateBar) {
+			Long newQty = findBar.getItemQty()+ data.getReceQty(); 
+			findBar.setItemQty(newQty);
 			data.setBar(findBar);
 		}
 		return revcRepo.saveAll(recvStateBar);
 	}
 
-	// Update a OpenSate Record
+	// Update a RecevState Record
 	@PutMapping("/bar/{itemId}/receviceState/{recvStateId}")
-	public RecvStateBar updateOpenState(@PathVariable(value = "itemId") Integer bid, @PathVariable(value = "recvStateId") Integer rcid, @RequestBody RecvStateBar recvStateBar) {
+	public RecvStateBar updateRecevState(@PathVariable(value = "itemId") Integer bid,
+			@PathVariable(value = "recvStateId") Integer rcid, @RequestBody RecvStateBar recvStateBar) {
 		if (!barRepo.existsById(bid)) {
 			throw new ResourceNotFoundException("Open State Item ", "id", bid);
 		}
-		RecvStateBar findRecvState = revcRepo.findById(rcid).orElseThrow(() -> new ResourceNotFoundException("Recevice State Not Found ", "id", rcid));
+		RecvStateBar findRecvState = revcRepo.findById(rcid)
+				.orElseThrow(() -> new ResourceNotFoundException("Recevice State Not Found ", "id", rcid));
 		findRecvState.setCreatedAt(recvStateBar.getCreatedAt());
 		findRecvState.setOpenSateBar(recvStateBar.getOpenSateBar());
 		findRecvState.setReceQty(recvStateBar.getReceQty());
@@ -111,10 +127,12 @@ public class RecvStateController {
 		return revcRepo.saveAndFlush(findRecvState);
 	}
 
-	// Delete a OpenSate Record
+	// Delete a RecevState Record
 	@DeleteMapping("/bar/{itemId}/receviceState/{recvStateId}")
-	public ResponseEntity<?> deleteOpenState(@PathVariable(value = "itemId") Integer bid, @PathVariable(value = "recvStateId") Integer rcid) {
-		RecvStateBar findRecvState = revcRepo.findById(rcid).orElseThrow(() -> new ResourceNotFoundException("Recevice State not found with id " + bid + " and postId " + rcid, null, bid));
+	public ResponseEntity<?> deleteRecevState(@PathVariable(value = "itemId") Integer bid,
+			@PathVariable(value = "recvStateId") Integer rcid) {
+		RecvStateBar findRecvState = revcRepo.findById(rcid).orElseThrow(() -> new ResourceNotFoundException(
+				"Recevice State not found with bar item id " + bid + " and recevstate Id " + rcid, null, bid));
 		revcRepo.delete(findRecvState);
 		return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
 	}
