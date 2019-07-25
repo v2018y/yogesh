@@ -47,7 +47,7 @@ public class RecvStateController {
 		// in this for loop we whatever get bar item data we return form that we fetch
 		// the specfic openstate data and add to temp vairlbe
 		for (Bar barItem : barList) {
-			result.add((RecvStateBar) barItem.getRecvSateBar());
+			result.addAll(barItem.getRecvSateBar());
 		}
 		// here we print the result
 		System.out.println("Your Data" + result);
