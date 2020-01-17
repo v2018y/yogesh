@@ -1,0 +1,16 @@
+version: '3.0'
+
+services:
+  token: 
+    container_name: vany-app
+    image: vany-app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 7005:8080
+    networks:
+      - appnet 
+
+networks: 
+  appnet:
